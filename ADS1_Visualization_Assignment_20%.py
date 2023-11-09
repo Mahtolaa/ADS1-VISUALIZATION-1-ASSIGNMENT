@@ -1,11 +1,5 @@
 # -*- coding: utf-8 -*-
 """
-Created on Thu Nov  9 14:33:46 2023
-
-@author: HP
-"""
-
-"""
 Created on Wed Nov  8 20:05:45 2023
 
 @author: HP
