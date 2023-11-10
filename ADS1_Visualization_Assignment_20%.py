@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Created on Wed Nov  8 20:05:45 2023
+Created on Thu Nov  9 14:33:46 2023
 
 @author: HP
 """
@@ -13,24 +13,46 @@ import matplotlib.pyplot as plt
 
 # Define the function for plotting the GDP time-series
 def ln_crt(x, y, label):
+    
     """
     Plot a time-series line plot of the GDP growth for the countries in the 
     dataframe.
-
+    
     Parameters:
     - x: Years(time-series)
     - y: GDP (current US$)
-
+    
     Returns
     ------------------------
     fig_ln: line 2D figures
     a collection of line
     """
-    return fig_ln
+    
+    # Make a line plot
+    fig_ln = plt.figure(figsize=(14, 8))
 
+    # Loop through each country and plot the time-series
+    for country in gdp_data_long['Country Name'].unique():
+        country_data = gdp_data_long[gdp_data_long['Country Name'] == country]
+        plt.plot(country_data['Year'], country_data['GDP'], label=country)
+
+    # Add title and labels
+    plt.title('GDP Growth Over the Years', fontsize=16)
+    plt.xlabel('Year', fontsize=14)
+    plt.ylabel('GDP (current US$)', fontsize=14)
+    plt.legend()
+
+    # Save the plot
+    plt.savefig('gdp_timeseries.png')
+
+    # Show the plot
+    plt.show()
+    return fig_ln
+    
 
 # Define the function for the bar plot
 def bar_crt(df):
+    
     """
     Make a bar plot for the GDP per China region.
 
@@ -42,18 +64,39 @@ def bar_crt(df):
     fig_bar: A bar chart
     a collection of bars depicting the data plotted.
     """
+    
+    # Create the bar plot
+    fig_bar = plt.figure(figsize=(14, 8))
+
+    # Aggregate the GDP data by region, sort the values and plot the bar
+    df.groupby('Region')['GDP'].sum().sort_values(ascending=False).\
+    plot(kind='bar')
+
+    # Set the title and labels
+    plt.title('Total GDP per China Region', fontsize=16)
+    plt.xlabel('Region', fontsize=14)
+    plt.ylabel('Total GDP (current US$)', fontsize=14)
+    plt.xticks(rotation=45)
+
+    # Save the plot
+    plt.savefig('china_gdp_by_region.png')
+
+    # Show the plot
+    plt.tight_layout()
+    plt.show()
     return fig_bar
 
 
 # Define the function for the box plot
 def box_plt(df):
+    
     """
     Create a box plot to show the yearly distribution of GDP per China 
     province for a specified period, using matplotlib.
 
     Parameters:
     - df: A pandas DataFrame containing the long-format GDP data.
-    
+
     Returns
     ------------------------
     fig_box: A box plot
@@ -64,6 +107,26 @@ def box_plt(df):
     by 1.5x the inter-quartile range (IQR). Flier points are those past the 
     end of the whiskers
     """
+    
+    # Make the box plot
+    fig_box, ax = plt.subplots(figsize=(16, 10))
+    ax.boxplot(data_to_plot, vert=True, patch_artist=True)
+
+    # Set the title and labels
+    ax.set_title('Yearly Distribution of GDP per China Province from {} to {}'
+                 .format(1990, 2020), fontsize=16)
+    ax.set_xlabel('Province', fontsize=14)
+    ax.set_ylabel('GDP (current US$)', fontsize=14)
+
+    # Set x-axis labels and rotate them
+    ax.set_xticklabels(provinces, rotation=90)
+
+    # Save the plot
+    plt.savefig('Provincial_gdp_boxplot.png')
+
+    # Show the plot
+    plt.tight_layout()
+    plt.show()
     return fig_box
 
 
@@ -119,48 +182,8 @@ china_gdp_long['Region'] = china_gdp_long['Province'].map(province_to_region)
 print(gdp_data_long.head())
 print(china_gdp_long.head())
 
-# Make a line plot
-fig_ln = plt.figure(figsize=(14, 8))
-
-# Loop through each country and plot the time-series
-for country in gdp_data_long['Country Name'].unique():
-        country_data = gdp_data_long[gdp_data_long['Country Name'] == country]
-        plt.plot(country_data['Year'], country_data['GDP'], label=country)
-
-# Adding title and labels
-plt.title('GDP Growth Over the Years', fontsize=16)
-plt.xlabel('Year', fontsize=14)
-plt.ylabel('GDP (current US$)', fontsize=14)
-plt.legend()
-
-# Save the plot
-plt.savefig('gdp_timeseries.png')
-
-# Show the plot
-plt.show()
-
 # use the function to plot the time-series from the gdp_data_long dataframe
 ln_crt(gdp_data_long['Year'], gdp_data_long['GDP'], label='country')
-
-# Create the bar plot
-fig_bar = plt.figure(figsize=(14, 8))
-
-# Aggregate the GDP data by region and sort the values
-china_gdp_long.groupby('Region')['GDP'].sum().sort_values(ascending=False).\
-plot(kind='bar')
-
-# Set the title and labels
-plt.title('Total GDP per China Region', fontsize=16)
-plt.xlabel('Region', fontsize=14)
-plt.ylabel('Total GDP (current US$)', fontsize=14)
-plt.xticks(rotation=45)
-
-# Save the plot
-plt.savefig('china_gdp_by_region.png')
-
-# Show the plot
-plt.tight_layout()
-plt.show()
 
 # Call the function to plot the GDP by region
 bar_crt(china_gdp_long)
@@ -174,26 +197,6 @@ provinces = china_gdp_long_filtered['Province'].unique()
 data_to_plot = [china_gdp_long_filtered.loc[china_gdp_long_filtered
                     ['Province'] == province, 'GDP'].values for province
                     in provinces]
-
-# Make the box plot
-fig_box, ax = plt.subplots(figsize=(16, 10))
-ax.boxplot(data_to_plot, vert=True, patch_artist=True)
-
-# Set the title and labels
-ax.set_title('Yearly Distribution of GDP per China Province from {} to {}'
-             .format(1990, 2020), fontsize=16)
-ax.set_xlabel('Province', fontsize=14)
-ax.set_ylabel('GDP (current US$)', fontsize=14)
-
-# Set x-axis labels and rotate them
-ax.set_xticklabels(provinces, rotation=90)
-
-# Save the plot
-plt.savefig('Provincial_gdp_boxplot.png')
-
-# Show the plot
-plt.tight_layout()
-plt.show()
 
 # Call the function to plot the GDP distribution per province
 box_plt(china_gdp_long)
