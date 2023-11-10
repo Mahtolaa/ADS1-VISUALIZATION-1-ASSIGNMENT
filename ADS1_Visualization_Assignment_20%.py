@@ -13,8 +13,6 @@ import matplotlib.pyplot as plt
 
 # Define the function for plotting the GDP time-series
 def ln_crt(x, y, label):
-    
-    
     """
     Plot a time-series line plot of the GDP growth for the countries in the 
     dataframe.
@@ -28,14 +26,11 @@ def ln_crt(x, y, label):
     fig_ln: line 2D figures
     a collection of line
     """
-    
     return fig_ln
 
 
 # Define the function for the bar plot
 def bar_crt(df):
-    
-    
     """
     Make a bar plot for the GDP per China region.
 
@@ -47,23 +42,18 @@ def bar_crt(df):
     fig_bar: A bar chart
     a collection of bars depicting the data plotted.
     """
-    
     return fig_bar
 
 
 # Define the function for the box plot
-def box_plt(df, start_year=1992, end_year=2020):
-    
-    
+def box_plt(df):
     """
     Create a box plot to show the yearly distribution of GDP per China 
     province for a specified period, using matplotlib.
 
     Parameters:
     - df: A pandas DataFrame containing the long-format GDP data.
-    - start_year: The start year for the distribution (inclusive).
-    - end_year: The end year for the distribution (inclusive).
-
+    
     Returns
     ------------------------
     fig_box: A box plot
@@ -74,7 +64,6 @@ def box_plt(df, start_year=1992, end_year=2020):
     by 1.5x the inter-quartile range (IQR). Flier points are those past the 
     end of the whiskers
     """
-    
     return fig_box
 
 
