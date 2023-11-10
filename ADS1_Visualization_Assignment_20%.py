@@ -25,7 +25,7 @@ def ln_crt(x, y, label):
     Returns
     ------------------------
     fig_ln: line 2D figures
-    a collection of line
+    a collection of line depicting the data plotted.
     """
     
     # Make a line plot
